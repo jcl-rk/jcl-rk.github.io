@@ -306,7 +306,7 @@ interactiveElements.forEach(element => {
         submitBtn.style.opacity = '1';
         submitBtn.style.cursor = 'pointer';
       } else {
-        formFeedback.textContent = '❌ Failed to send. Please try again or contact via the buttons above.';
+        formFeedback.textContent = '❌ Failed to send. Please try again or contact via the buttons below.';
         formFeedback.className = 'error';
         
         // Re-enable button immediately on real error
@@ -317,4 +317,5 @@ interactiveElements.forEach(element => {
       }
     }
   });
+
 })();
