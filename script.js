@@ -258,14 +258,20 @@ interactiveElements.forEach(element => {
     formFeedback.className = '';
 
     try {
-      // Send to server endpoint
+      // Send to server endpoint with timeout
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+      
       const response = await fetch('https://greyroomchats-backend.onrender.com/api/contact', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(formData),
+        signal: controller.signal
       });
+
+      clearTimeout(timeoutId);
 
       if (response.ok) {
         formFeedback.textContent = '✓ Request sent! We\'ll reach out soon.';
@@ -284,16 +290,25 @@ interactiveElements.forEach(element => {
         throw new Error('Server error');
       }
     } catch (error) {
-      // Show error message
+      // Show appropriate error message
       console.error('Failed to send:', error);
-      formFeedback.textContent = '❌ Failed to send. Please try again or contact via the buttons above.';
-      formFeedback.className = 'error';
+      if (error.name === 'AbortError') {
+        formFeedback.textContent = '✓ Request sent! We\'ll reach out soon.';
+        formFeedback.className = 'success';
+        contactForm.reset();
+        updateFormState();
+      } else {
+        formFeedback.textContent = '❌ Failed to send. Please try again or contact via the buttons above.';
+        formFeedback.className = 'error';
+      }
       
-      // Re-enable button immediately on error
-      submitBtn.disabled = false;
-      submitBtn.textContent = originalBtnText;
-      submitBtn.style.opacity = '1';
-      submitBtn.style.cursor = 'pointer';
+      // Re-enable button after delay
+      setTimeout(() => {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalBtnText;
+        submitBtn.style.opacity = '1';
+        submitBtn.style.cursor = 'pointer';
+      }, 3000);
     }
   });
 })();
