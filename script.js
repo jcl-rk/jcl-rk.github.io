@@ -250,6 +250,22 @@ interactiveElements.forEach(element => {
       return; // Silently reject bot submission
     }
 
+    // Validate Telegram username format if selected
+    const selectedMethod = document.querySelector('input[name="contact-method"]:checked')?.value;
+    if (selectedMethod === 'telegram') {
+      const telegramValue = telegramInput.value.trim();
+      const telegramRegex = /^@?[a-zA-Z0-9_]{5,32}$/;
+      if (!telegramValue || !telegramRegex.test(telegramValue)) {
+        formFeedback.textContent = '❌ Please enter a valid Telegram username (5-32 characters, letters, numbers, underscore)';
+        formFeedback.className = 'error';
+        return;
+      }
+    }
+
+    // Clear previous feedback
+    formFeedback.textContent = '';
+    formFeedback.className = '';
+
     const submitBtn = contactForm.querySelector('.submit-btn');
     const originalBtnText = submitBtn.textContent;
 
@@ -271,6 +287,8 @@ interactiveElements.forEach(element => {
     formFeedback.textContent = '';
     formFeedback.className = '';
 
+    let requestCompleted = false;
+
     try {
       // Send to server endpoint with timeout
       const controller = new AbortController();
@@ -286,6 +304,7 @@ interactiveElements.forEach(element => {
       });
 
       clearTimeout(timeoutId);
+      requestCompleted = true;
 
       if (response.ok) {
         // Change button text to success checkmark
@@ -310,25 +329,21 @@ interactiveElements.forEach(element => {
     } catch (error) {
       // Show appropriate error message
       console.error('Failed to send:', error);
+      requestCompleted = true;
+      
       if (error.name === 'AbortError') {
-        formFeedback.textContent = '⏱️ Server is waking up from sleep. Please try again in 30 seconds.';
+        formFeedback.textContent = '⏱️ Request timeout. Server may be starting up. Please try again.';
         formFeedback.className = 'error';
-        
-        // Re-enable button immediately
-        submitBtn.disabled = false;
-        submitBtn.textContent = originalBtnText;
-        submitBtn.style.opacity = '1';
-        submitBtn.style.cursor = 'pointer';
       } else {
         formFeedback.textContent = '❌ Failed to send. Please try again or contact via the buttons below.';
         formFeedback.className = 'error';
-        
-        // Re-enable button immediately on real error
-        submitBtn.disabled = false;
-        submitBtn.textContent = originalBtnText;
-        submitBtn.style.opacity = '1';
-        submitBtn.style.cursor = 'pointer';
       }
+      
+      // Re-enable button on error
+      submitBtn.disabled = false;
+      submitBtn.textContent = originalBtnText;
+      submitBtn.style.opacity = '1';
+      submitBtn.style.cursor = 'pointer';
     }
   });
 
