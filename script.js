@@ -318,37 +318,3 @@ interactiveElements.forEach(element => {
     }
   });
 })();
-
-// Keep-Alive System (24/7)
-// Pings backend every 12 minutes to prevent free tier sleep
-// Uses ~744 hours/month (750 hour limit resets monthly)
-(function() {
-  const BACKEND_URL = 'https://greyroomchats-backend.onrender.com';
-  const PING_INTERVAL = 12 * 60 * 1000; // 12 minutes (3-min safety margin before 15-min sleep)
-
-  async function pingBackend() {
-    try {
-      console.log('🏓 Pinging backend to keep it awake...');
-      const response = await fetch(`${BACKEND_URL}/api/health`, {
-        method: 'GET',
-        signal: AbortSignal.timeout(5000) // 5 second timeout for health checks
-      });
-      
-      if (response.ok) {
-        console.log('✓ Backend is awake and healthy');
-      }
-    } catch (error) {
-      // Silently fail - health check errors are not critical
-      console.log('Keep-alive ping failed (backend may be waking up):', error.message);
-    }
-  }
-
-  // Start keep-alive system
-  console.log('🚀 Keep-alive system started (24/7 monitoring)');
-  
-  // Ping immediately on page load to wake up backend
-  pingBackend();
-  
-  // Then ping every 12 minutes
-  setInterval(pingBackend, PING_INTERVAL);
-})();
