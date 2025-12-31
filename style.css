@@ -820,15 +820,30 @@ h2::after {
 footer {
   text-align: center;
   padding: 3rem 1.5rem;
-  font-size: 0.75rem;
+  font-size: 0.85rem;
   color: var(--subtle);
   border-block-start: 1px solid rgba(255,255,255,0.08);
+}
+
+footer a {
+  color: var(--accent);
+  text-decoration: none;
+  margin-left: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+footer a:hover {
+  color: #fff;
+  background: rgba(0,217,255,0.1);
+  text-decoration: underline;
 }
 
 @media (max-width: 768px) {
   footer {
     padding: 2rem 1rem;
-    font-size: 0.7rem;
+    font-size: 0.8rem;
   }
 }
 
