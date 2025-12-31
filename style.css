@@ -589,6 +589,29 @@ h2::after {
   box-shadow: 0 6px 18px rgba(0,217,255,0.3);
 }
 
+.submit-btn.loading {
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.submit-btn.loading::after {
+  content: '';
+  position: absolute;
+  inset: 50% auto auto 50%;
+  inline-size: 16px;
+  block-size: 16px;
+  margin-inline-start: -8px;
+  margin-block-start: -8px;
+  border: 2px solid rgba(255,255,255,0.6);
+  border-top-color: rgba(255,255,255,0.15);
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
 .submit-btn::before {
   content: '';
   position: absolute;
@@ -655,6 +678,12 @@ h2::after {
 .privacy-notice a:hover {
   color: #fff;
   text-decoration: underline;
+}
+
+.hp-field {
+  position: absolute;
+  left: -9999px;
+  opacity: 0;
 }
 
 /* Instant Contact Cards */

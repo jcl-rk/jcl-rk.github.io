@@ -166,6 +166,7 @@ function createRipple(event) {
   ripple.style.width = ripple.style.height = size + 'px';
   ripple.style.left = x + 'px';
   ripple.style.top = y + 'px';
+    const honeypotInput = document.getElementById('hp-field');
   ripple.classList.add('ripple');
 
   const existingRipple = button.querySelector('.ripple');
@@ -213,7 +214,8 @@ interactiveElements.forEach(element => {
     
     if (selectedMethod === 'email') {
       emailInput.required = true;
-      telegramInput.required = false;
+        timestamp: new Date().toISOString(),
+        honeypot: honeypotInput ? honeypotInput.value : ''
       emailInput.closest('.form-group').style.display = 'flex';
       telegramInput.closest('.form-group').style.display = 'none';
     } else if (selectedMethod === 'telegram') {

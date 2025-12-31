@@ -256,6 +256,12 @@
             </div>
           </div>
 
+          <!-- Honeypot field to deter bots -->
+          <div class="form-group hp-field" aria-hidden="true">
+            <label for="hp-field">Leave this empty</label>
+            <input type="text" id="hp-field" name="hp-field" tabindex="-1" autocomplete="off" />
+          </div>
+
           <div class="form-group">
             <label for="email-input">Email Address</label>
             <input type="email" id="email-input" name="email" placeholder="your@email.com" />
