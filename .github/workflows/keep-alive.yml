@@ -1,0 +1,27 @@
+name: Keep Backend Alive
+
+on:
+  schedule:
+    # Runs every 14 minutes (GitHub Actions minimum is 5 minutes)
+    # Note: GitHub may delay scheduled runs by a few minutes
+    - cron: '*/14 * * * *'
+  workflow_dispatch: # Allows manual trigger from Actions tab
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Ping Backend Health Endpoint
+        run: |
+          echo "🏓 Pinging backend to keep it awake..."
+          response=$(curl -s -o /dev/null -w "%{http_code}" https://greyroomchats-backend.onrender.com/api/health)
+          
+          if [ $response -eq 200 ]; then
+            echo "✅ Backend is awake and healthy (HTTP $response)"
+          else
+            echo "⚠️ Backend responded with HTTP $response"
+          fi
+          
+      - name: Log Timestamp
+        run: echo "Keep-alive ping completed at $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
