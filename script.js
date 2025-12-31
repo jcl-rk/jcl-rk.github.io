@@ -119,7 +119,7 @@ sections.forEach(section => {
   if (logoLink) {
     logoLink.addEventListener('click', (e) => {
       e.preventDefault();
-      window.scrollTo({ insetBlockStart: 0, behavior: 'smooth' });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     });
   }
   
