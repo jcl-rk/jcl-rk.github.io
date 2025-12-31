@@ -60,6 +60,9 @@ sections.forEach(section => {
     document.body.appendChild(lightbox);
   }
   
+  /**
+   * Open the lightbox gallery at the first image
+   */
   function openLightbox() {
     document.body.style.overflow = 'hidden';
     currentIndex = 0;
@@ -70,12 +73,18 @@ sections.forEach(section => {
     updateImage();
   }
   
+  /**
+   * Close the lightbox gallery and restore page scrolling
+   */
   function closeLightbox() {
     lightbox.classList.remove('active');
     backdrop.classList.remove('active');
     document.body.style.overflow = '';
   }
   
+  /**
+   * Update the displayed image in the lightbox with transition effect
+   */
   function updateImage() {
     currentImage.classList.add('changing');
     
@@ -96,11 +105,17 @@ sections.forEach(section => {
     }, IMAGE_TRANSITION_DELAY_MS);
   }
   
+  /**
+   * Navigate to the next image in the gallery (wraps to first)
+   */
   function nextImage() {
     currentIndex = (currentIndex + 1) % images.length;
     updateImage();
   }
   
+  /**
+   * Navigate to the previous image in the gallery (wraps to last)
+   */
   function prevImage() {
     currentIndex = (currentIndex - 1 + images.length) % images.length;
     updateImage();
@@ -166,7 +181,10 @@ sections.forEach(section => {
   });
 })();
 
-// Add ripple effect to interactive elements using event delegation
+/**
+ * Create a ripple animation effect on interactive elements
+ * @param {MouseEvent} event - The click event
+ */
 function createRipple(event) {
   const button = event.target.closest('.service-card, .proof-card, .instant-contact-card, .view-gallery, .cta, .submit-btn');
   if (!button) return;
