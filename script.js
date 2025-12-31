@@ -45,8 +45,8 @@ sections.forEach(section => {
   const closeBtn = document.getElementById('close-lightbox');
   const prevBtn = document.getElementById('prev-image');
   const nextBtn = document.getElementById('next-image');
-  const logoLink = document.querySelector('.logo');
-  // create backdrop for clearer modal separation
+  
+  // Event listeners
   let backdrop = document.getElementById('proof-backdrop');
   if (!backdrop) {
     backdrop = document.createElement('div');
@@ -140,14 +140,6 @@ sections.forEach(section => {
   
   if (nextBtn) {
     nextBtn.addEventListener('click', nextImage);
-  }
-
-  // Smooth scroll to top when clicking the logo
-  if (logoLink) {
-    logoLink.addEventListener('click', (e) => {
-      e.preventDefault();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
   }
   
   // Close on background click
@@ -367,3 +359,12 @@ interactiveElements.forEach(element => {
   });
 
 })();
+
+// Logo click handler - smooth scroll to top
+const logoLink = document.querySelector('.logo');
+if (logoLink) {
+  logoLink.addEventListener('click', (e) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+}

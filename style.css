@@ -33,12 +33,18 @@ body {
   background: linear-gradient(135deg, var(--bg) 0%, var(--muted) 50%, var(--bg) 100%);
   background-size: 200% 200%;
   background-attachment: fixed;
-  animation: gradientShift 15s ease infinite;
   color: var(--text);
   line-height: 1.7;
   overflow-x: hidden;
   overscroll-behavior-x: none;
   isolation: isolate; /* allow background accents behind content */
+}
+
+/* Animate background gradient only if user doesn't prefer reduced motion */
+@media (prefers-reduced-motion: no-preference) {
+  body {
+    animation: gradientShift 15s ease infinite;
+  }
 }
 
 @keyframes gradientShift {
@@ -105,7 +111,12 @@ h1 {
 
 .hero h1 {
   font-size: 6rem;
-  animation: heroFloat 3s ease-in-out infinite, glowPulse 2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero h1 {
+    animation: heroFloat 3s ease-in-out infinite, glowPulse 2s ease-in-out infinite;
+  }
 }
 
 @media (max-width: 768px) {
@@ -323,7 +334,12 @@ h2::after {
   line-height: 1;
   margin-block-end: 1rem;
   display: inline-block;
-  animation: float 3s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .service-icon {
+    animation: float 3s ease-in-out infinite;
+  }
 }
 
 @keyframes float {
@@ -392,7 +408,12 @@ h2::after {
   display: inline-block;
   filter: grayscale(0.3);
   transition: all 0.4s ease;
-  animation: float 3s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .proof-icon {
+    animation: float 3s ease-in-out infinite;
+  }
 }
 
 .proof-card:hover .proof-icon {
