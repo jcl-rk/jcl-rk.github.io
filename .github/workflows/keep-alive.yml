@@ -2,9 +2,9 @@ name: Keep Backend Alive
 
 on:
   schedule:
-    # Runs every 14 minutes (GitHub Actions minimum is 5 minutes)
+    # Runs every 12 minutes (3 minute safety margin before 15-min sleep)
     # Note: GitHub may delay scheduled runs by a few minutes
-    - cron: '*/14 * * * *'
+    - cron: '*/12 * * * *'
   workflow_dispatch: # Allows manual trigger from Actions tab
 
 jobs:
