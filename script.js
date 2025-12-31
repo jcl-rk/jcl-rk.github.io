@@ -214,8 +214,7 @@ interactiveElements.forEach(element => {
     
     if (selectedMethod === 'email') {
       emailInput.required = true;
-        timestamp: new Date().toISOString(),
-        honeypot: honeypotInput ? honeypotInput.value : ''
+      telegramInput.required = false;
       emailInput.closest('.form-group').style.display = 'flex';
       telegramInput.closest('.form-group').style.display = 'none';
     } else if (selectedMethod === 'telegram') {
