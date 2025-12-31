@@ -329,7 +329,7 @@ interactiveElements.forEach(element => {
   async function pingBackend() {
     try {
       console.log('🏓 Pinging backend to keep it awake...');
-      const response = await fetch(`${BACKEND_URL}/health`, {
+      const response = await fetch(`${BACKEND_URL}/api/health`, {
         method: 'GET',
         signal: AbortSignal.timeout(5000) // 5 second timeout for health checks
       });
