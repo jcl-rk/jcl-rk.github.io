@@ -212,28 +212,78 @@
     <div class="container">
       <h2>Contact</h2>
       <p class="section-text">
-        For private inquiries, collaborations, or consultations, contact us directly.
+        For private inquiries, collaborations, or consultations, reach out using either method below.
       </p>
 
-      <div class="click-hint">
-        <span class="hint-text">Click me! ↓</span>
+      <!-- Primary CTA: Request Contact Form -->
+      <div class="contact-section primary-cta-section">
+        <div class="cta-header">
+          <h3>Request Contact</h3>
+          <p>Leave your details and we'll reach out to you</p>
+        </div>
+
+        <form id="contact-form" class="contact-form">
+          <div class="form-group">
+            <label for="contact-method">Preferred Contact Method *</label>
+            <div class="radio-group">
+              <label class="radio-label">
+                <input type="radio" name="contact-method" value="email" required>
+                <span>Email</span>
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="contact-method" value="telegram" required>
+                <span>Telegram</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="email-input">Email Address</label>
+            <input type="email" id="email-input" name="email" placeholder="your@email.com" />
+          </div>
+
+          <div class="form-group">
+            <label for="telegram-input">Telegram Username</label>
+            <input type="text" id="telegram-input" name="telegram" placeholder="@yourusername" />
+          </div>
+
+          <div class="form-group">
+            <label for="message-input">Message (Optional)</label>
+            <textarea id="message-input" name="message" placeholder="What are you looking for?" rows="4"></textarea>
+          </div>
+
+          <button type="submit" class="submit-btn">Send Request</button>
+          <p class="form-feedback" id="form-feedback"></p>
+        </form>
       </div>
 
-      <div class="contact-cards">
-        <a href="mailto:greyroomchats@gmail.com" class="contact-card">
-          <div class="contact-icon">✉️</div>
-          <div class="contact-info">
-            <h4>Email</h4>
-            <span class="contact-text">greyroomchats@gmail.com</span>
-          </div>
-        </a>
-        <a href="https://t.me/greyroomchats" target="_blank" class="contact-card">
-          <div class="contact-icon">💬</div>
-          <div class="contact-info">
-            <h4>Telegram</h4>
-            <span class="contact-text">@greyroomchats</span>
-          </div>
-        </a>
+      <!-- Secondary Option: Instant Contact -->
+      <div class="contact-section secondary-contact-section">
+        <div class="secondary-header">
+          <h3>Prefer Instant Contact?</h3>
+          <p>Reach out directly to us</p>
+        </div>
+
+        <div class="click-hint">
+          <span class="hint-text">Click me! ↓</span>
+        </div>
+
+        <div class="instant-contact-cards">
+          <a href="mailto:greyroomchats@gmail.com" class="instant-contact-card">
+            <div class="contact-icon">✉️</div>
+            <div class="contact-info">
+              <h4>Email</h4>
+              <span class="contact-text">greyroomchats@gmail.com</span>
+            </div>
+          </a>
+          <a href="https://t.me/greyroomchats" target="_blank" class="instant-contact-card">
+            <div class="contact-icon">💬</div>
+            <div class="contact-info">
+              <h4>Telegram</h4>
+              <span class="contact-text">@greyroomchats</span>
+            </div>
+          </a>
+        </div>
       </div>
     </div>
   </section>
