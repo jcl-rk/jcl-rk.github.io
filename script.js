@@ -1,3 +1,9 @@
+// Configuration constants
+const RIPPLE_DURATION_MS = 600;
+const IMAGE_TRANSITION_DELAY_MS = 250;
+const SUCCESS_BUTTON_RESET_MS = 2000;
+const REQUEST_TIMEOUT_MS = 60000; // 60 seconds for server wake-up
+
 const sections = document.querySelectorAll('.section');
 
 const observer = new IntersectionObserver(
@@ -87,7 +93,7 @@ sections.forEach(section => {
         currentImage.classList.remove('changing');
         console.error('Failed to load image:', images[currentIndex]);
       };
-    }, 250);
+    }, IMAGE_TRANSITION_DELAY_MS);
   }
   
   function nextImage() {
@@ -160,9 +166,11 @@ sections.forEach(section => {
   });
 })();
 
-// Add ripple effect to interactive elements
+// Add ripple effect to interactive elements using event delegation
 function createRipple(event) {
-  const button = event.currentTarget;
+  const button = event.target.closest('.service-card, .proof-card, .instant-contact-card, .view-gallery, .cta, .submit-btn');
+  if (!button) return;
+  
   const ripple = document.createElement('span');
   const rect = button.getBoundingClientRect();
   const size = Math.max(rect.width, rect.height);
@@ -172,7 +180,6 @@ function createRipple(event) {
   ripple.style.width = ripple.style.height = size + 'px';
   ripple.style.left = x + 'px';
   ripple.style.top = y + 'px';
-    const honeypotInput = document.getElementById('hp-field');
   ripple.classList.add('ripple');
 
   const existingRipple = button.querySelector('.ripple');
@@ -184,13 +191,11 @@ function createRipple(event) {
 
   setTimeout(() => {
     ripple.remove();
-  }, 600);
+  }, RIPPLE_DURATION_MS);
 }
 
-// Add ripple effect to interactive elements
-document.querySelectorAll('.service-card, .proof-card, .instant-contact-card, .view-gallery, .cta, .submit-btn').forEach(item => {
-  item.addEventListener('click', createRipple);
-});
+// Use event delegation on document for ripple effects
+document.addEventListener('click', createRipple);
 
 // Add subtle pulse animation on hover for interactive elements
 const interactiveElements = document.querySelectorAll('.service-card, .proof-card, .instant-contact-card');
@@ -292,7 +297,7 @@ interactiveElements.forEach(element => {
     try {
       // Send to server endpoint with timeout
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 60000); // 60 second timeout (allows server wake-up)
+      const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
       
       const response = await fetch('https://greyroomchats-backend.onrender.com/api/contact', {
         method: 'POST',
@@ -322,7 +327,7 @@ interactiveElements.forEach(element => {
           submitBtn.disabled = false;
           submitBtn.textContent = originalBtnText;
           submitBtn.style.cursor = 'pointer';
-        }, 2000);
+        }, SUCCESS_BUTTON_RESET_MS);
       } else {
         throw new Error('Server error');
       }
