@@ -81,6 +81,12 @@ sections.forEach(section => {
       currentImage.onload = () => {
         currentImage.classList.remove('changing');
       };
+      
+      // Handle image loading errors
+      currentImage.onerror = () => {
+        currentImage.classList.remove('changing');
+        console.error('Failed to load image:', images[currentIndex]);
+      };
     }, 250);
   }
   
@@ -236,6 +242,13 @@ interactiveElements.forEach(element => {
   // Form submission
   contactForm.addEventListener('submit', async (e) => {
     e.preventDefault();
+
+    // Honeypot validation - block bot submissions
+    const honeypotField = document.getElementById('hp-field');
+    if (honeypotField && honeypotField.value) {
+      console.log('Bot detected via honeypot');
+      return; // Silently reject bot submission
+    }
 
     const submitBtn = contactForm.querySelector('.submit-btn');
     const originalBtnText = submitBtn.textContent;
