@@ -310,8 +310,6 @@ interactiveElements.forEach(element => {
     formFeedback.textContent = '';
     formFeedback.className = '';
 
-    let requestCompleted = false;
-
     try {
       // Send to server endpoint with timeout
       const controller = new AbortController();
@@ -327,7 +325,6 @@ interactiveElements.forEach(element => {
       });
 
       clearTimeout(timeoutId);
-      requestCompleted = true;
 
       if (response.ok) {
         // Change button text to success checkmark
@@ -352,7 +349,6 @@ interactiveElements.forEach(element => {
     } catch (error) {
       // Show appropriate error message
       console.error('Failed to send:', error);
-      requestCompleted = true;
       
       if (error.name === 'AbortError') {
         formFeedback.textContent = '⏱️ Request timeout. Server may be starting up. Please try again.';
