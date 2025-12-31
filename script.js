@@ -260,7 +260,7 @@ interactiveElements.forEach(element => {
     try {
       // Send to server endpoint with timeout
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+      const timeoutId = setTimeout(() => controller.abort(), 60000); // 60 second timeout (allows server wake-up)
       
       const response = await fetch('https://greyroomchats-backend.onrender.com/api/contact', {
         method: 'POST',
@@ -297,22 +297,14 @@ interactiveElements.forEach(element => {
       // Show appropriate error message
       console.error('Failed to send:', error);
       if (error.name === 'AbortError') {
-        // Change button text to success checkmark
-        submitBtn.textContent = '✓ Sent!';
+        formFeedback.textContent = '⏱️ Server is waking up from sleep. Please try again in 30 seconds.';
+        formFeedback.className = 'error';
+        
+        // Re-enable button immediately
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalBtnText;
         submitBtn.style.opacity = '1';
-        
-        // Show success message
-        formFeedback.textContent = '✓ Request sent! We\'ll reach out soon.';
-        formFeedback.className = 'success';
-        contactForm.reset();
-        updateFormState();
-        
-        // Re-enable button after 2 seconds
-        setTimeout(() => {
-          submitBtn.disabled = false;
-          submitBtn.textContent = originalBtnText;
-          submitBtn.style.cursor = 'pointer';
-        }, 2000);
+        submitBtn.style.cursor = 'pointer';
       } else {
         formFeedback.textContent = '❌ Failed to send. Please try again or contact via the buttons above.';
         formFeedback.className = 'error';
@@ -325,4 +317,38 @@ interactiveElements.forEach(element => {
       }
     }
   });
+})();
+
+// Keep-Alive System (24/7)
+// Pings backend every 14 minutes to prevent free tier sleep
+// Uses ~744 hours/month (750 hour limit resets monthly)
+(function() {
+  const BACKEND_URL = 'https://greyroomchats-backend.onrender.com';
+  const PING_INTERVAL = 14 * 60 * 1000; // 14 minutes (before 15-min sleep threshold)
+
+  async function pingBackend() {
+    try {
+      console.log('🏓 Pinging backend to keep it awake...');
+      const response = await fetch(`${BACKEND_URL}/health`, {
+        method: 'GET',
+        signal: AbortSignal.timeout(5000) // 5 second timeout for health checks
+      });
+      
+      if (response.ok) {
+        console.log('✓ Backend is awake and healthy');
+      }
+    } catch (error) {
+      // Silently fail - health check errors are not critical
+      console.log('Keep-alive ping failed (backend may be waking up):', error.message);
+    }
+  }
+
+  // Start keep-alive system
+  console.log('🚀 Keep-alive system started (24/7 monitoring)');
+  
+  // Ping immediately on page load to wake up backend
+  pingBackend();
+  
+  // Then ping every 14 minutes
+  setInterval(pingBackend, PING_INTERVAL);
 })();
