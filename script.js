@@ -3,6 +3,7 @@ const RIPPLE_DURATION_MS = 600;
 const IMAGE_TRANSITION_DELAY_MS = 250;
 const SUCCESS_BUTTON_RESET_MS = 2000;
 const REQUEST_TIMEOUT_MS = 60000; // 60 seconds for server wake-up
+const BACKEND_API_URL = 'https://greyroomchats-backend.onrender.com/api/contact'; // Change for local dev
 
 const sections = document.querySelectorAll('.section');
 
@@ -24,6 +25,11 @@ const observer = new IntersectionObserver(
 
 sections.forEach(section => {
   observer.observe(section);
+});
+
+// Cleanup observer when page unloads
+window.addEventListener('beforeunload', () => {
+  observer.disconnect();
 });
 
 (function() {
@@ -307,7 +313,7 @@ interactiveElements.forEach(element => {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
       
-      const response = await fetch('https://greyroomchats-backend.onrender.com/api/contact', {
+      const response = await fetch(BACKEND_API_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

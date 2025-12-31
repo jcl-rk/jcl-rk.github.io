@@ -1,0 +1,23 @@
+# robots.txt for GreyRoomChats
+# https://greyroomchats.me/robots.txt
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://greyroomchats.me/sitemap.xml
+
+# Crawl-delay (optional, helps with server load)
+Crawl-delay: 1
+
+# Disallow backend API paths if accessed directly
+Disallow: /api/
+
+# Allow all main pages
+Allow: /index.html
+Allow: /privacy.html
+
+# Block common bot paths (if any)
+Disallow: /admin/
+Disallow: /.git/
+Disallow: /node_modules/
