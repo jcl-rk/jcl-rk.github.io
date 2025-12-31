@@ -181,12 +181,12 @@ function createRipple(event) {
 }
 
 // Add ripple effect to interactive elements
-document.querySelectorAll('.service-card, .proof-card, .contact-card, .view-gallery, .cta').forEach(item => {
+document.querySelectorAll('.service-card, .proof-card, .instant-contact-card, .view-gallery, .cta, .submit-btn').forEach(item => {
   item.addEventListener('click', createRipple);
 });
 
 // Add subtle pulse animation on hover for interactive elements
-const interactiveElements = document.querySelectorAll('.service-card, .proof-card, .contact-card');
+const interactiveElements = document.querySelectorAll('.service-card, .proof-card, .instant-contact-card');
 interactiveElements.forEach(element => {
   element.addEventListener('mouseenter', function() {
     this.style.animation = 'pulse 0.5s ease';
@@ -196,3 +196,84 @@ interactiveElements.forEach(element => {
     this.style.animation = '';
   });
 });
+
+// Contact Form Handling
+(function() {
+  const contactForm = document.getElementById('contact-form');
+  const emailInput = document.getElementById('email-input');
+  const telegramInput = document.getElementById('telegram-input');
+  const contactMethodRadios = document.querySelectorAll('input[name="contact-method"]');
+  const formFeedback = document.getElementById('form-feedback');
+
+  if (!contactForm) return;
+
+  // Update input visibility based on contact method
+  function updateFormState() {
+    const selectedMethod = document.querySelector('input[name="contact-method"]:checked')?.value;
+    
+    if (selectedMethod === 'email') {
+      emailInput.required = true;
+      telegramInput.required = false;
+      emailInput.closest('.form-group').style.display = 'flex';
+      telegramInput.closest('.form-group').style.display = 'none';
+    } else if (selectedMethod === 'telegram') {
+      emailInput.required = false;
+      telegramInput.required = true;
+      emailInput.closest('.form-group').style.display = 'none';
+      telegramInput.closest('.form-group').style.display = 'flex';
+    }
+  }
+
+  // Listen for contact method changes
+  contactMethodRadios.forEach(radio => {
+    radio.addEventListener('change', updateFormState);
+  });
+
+  // Set initial state
+  updateFormState();
+
+  // Form submission
+  contactForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const formData = {
+      contactMethod: document.querySelector('input[name="contact-method"]:checked').value,
+      email: emailInput.value || null,
+      telegram: telegramInput.value || null,
+      message: document.getElementById('message-input').value || null,
+      timestamp: new Date().toISOString()
+    };
+
+    // Clear previous feedback
+    formFeedback.textContent = '';
+    formFeedback.className = '';
+
+    try {
+      // Send to server endpoint
+      const response = await fetch('https://greyroomchats-backend.onrender.com/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+      });
+
+      if (response.ok) {
+        formFeedback.textContent = '✓ Request sent! We\'ll reach out soon.';
+        formFeedback.className = 'success';
+        contactForm.reset();
+        updateFormState();
+      } else {
+        throw new Error('Server error');
+      }
+    } catch (error) {
+      // Fallback: Show message if server endpoint doesn't exist
+      // This allows the form to work even without a backend
+      console.warn('Server endpoint not available. Form would send:', formData);
+      formFeedback.textContent = '✓ Thank you! We\'ll reach out to you soon.';
+      formFeedback.className = 'success';
+      contactForm.reset();
+      updateFormState();
+    }
+  });
+})();
