@@ -236,6 +236,15 @@ interactiveElements.forEach(element => {
   contactForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
+    const submitBtn = contactForm.querySelector('.submit-btn');
+    const originalBtnText = submitBtn.textContent;
+
+    // Disable button and show loading state
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending...';
+    submitBtn.style.opacity = '0.6';
+    submitBtn.style.cursor = 'not-allowed';
+
     const formData = {
       contactMethod: document.querySelector('input[name="contact-method"]:checked').value,
       email: emailInput.value || null,
@@ -263,17 +272,28 @@ interactiveElements.forEach(element => {
         formFeedback.className = 'success';
         contactForm.reset();
         updateFormState();
+        
+        // Re-enable button after 3 seconds
+        setTimeout(() => {
+          submitBtn.disabled = false;
+          submitBtn.textContent = originalBtnText;
+          submitBtn.style.opacity = '1';
+          submitBtn.style.cursor = 'pointer';
+        }, 3000);
       } else {
         throw new Error('Server error');
       }
     } catch (error) {
-      // Fallback: Show message if server endpoint doesn't exist
-      // This allows the form to work even without a backend
-      console.warn('Server endpoint not available. Form would send:', formData);
-      formFeedback.textContent = '✓ Thank you! We\'ll reach out to you soon.';
-      formFeedback.className = 'success';
-      contactForm.reset();
-      updateFormState();
+      // Show error message
+      console.error('Failed to send:', error);
+      formFeedback.textContent = '❌ Failed to send. Please try again or contact via the buttons above.';
+      formFeedback.className = 'error';
+      
+      // Re-enable button immediately on error
+      submitBtn.disabled = false;
+      submitBtn.textContent = originalBtnText;
+      submitBtn.style.opacity = '1';
+      submitBtn.style.cursor = 'pointer';
     }
   });
 })();
