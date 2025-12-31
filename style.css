@@ -14,42 +14,6 @@
   --radius-lg: 16px;
 }
 
-*{box-sizing:border-box}
-body{font-family:'Poppins', Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;line-height:1.6;margin:0;color:var(--text)}
-.container{max-inline-size:1100px;margin:0 auto;padding:2rem}
-.section{padding:56px 0}
-
-/* Proof section stacked gallery styles */
-.proof-grid{display:flex;gap:2rem;align-items:center;justify-content:center;flex-wrap:wrap;position:relative}
-.main-proof{flex:0 0 320px;inline-size:320px;block-size:400px;border-radius:16px;overflow:hidden;box-shadow:0 20px 40px rgba(2,6,23,0.18);transform:rotate(-3deg);transition:transform .25s}
-.main-proof img{inline-size:100%;block-size:100%;display:block;object-fit:contain;background:var(--muted)}
-
-.stack{position:relative;inline-size:260px;block-size:360px}
-.stack .proof-item{position:absolute;inset-inline-start:0;inset-block-start:0;inline-size:100%;block-size:100%;border-radius:12px;overflow:hidden;box-shadow:0 0 15px rgba(0,217,255,0.3);transition:transform .28s,box-shadow .28s,border .28s;cursor:pointer;background:var(--card);border:2px solid var(--accent)}
-.stack .proof-item img{inline-size:100%;block-size:100%;display:block;object-fit:contain;background:var(--muted)}
-
-/* staggered transforms to create the layered, fanned effect */
-.stack .proof-item:nth-of-type(1){transform:translate(18px,-18px) rotate(-8deg) scale(.985);z-index:5}
-.stack .proof-item:nth-of-type(2){transform:translate(10px,8px) rotate(6deg) scale(.96);z-index:4}
-.stack .proof-item:nth-of-type(3){transform:translate(-8px,26px) rotate(-12deg) scale(.94);z-index:3}
-
-.stack .proof-item:hover{transform:translate(0,0) rotate(0) scale(1);z-index:12;box-shadow:0 0 40px rgba(0,217,255,0.8);border-color:#00ffff}
-
-.count-badge{position:absolute;inset-inline-end:8px;inset-block-end:8px;background:rgba(255,255,255,0.96);color:var(--text);padding:6px 10px;border-radius:999px;font-weight:600;box-shadow:0 6px 18px rgba(2,6,23,0.08);z-index:15;font-size:13px}
-
-.view-gallery{margin-block-start:0.25rem;padding:10px 14px;border-radius:10px;border:2px solid var(--accent);background:transparent;color:var(--accent);cursor:pointer;font-weight:600;transition:all 0.3s ease;box-shadow:0 0 15px rgba(0,217,255,0.3)}.view-gallery:hover{background:rgba(0,217,255,0.1);box-shadow:0 0 25px rgba(0,217,255,0.6);transform:scale(1.05)}
-
-/* Click hint styling */
-.click-hint{display:flex;justify-content:center;margin:2rem 0 1.5rem 0}
-.hint-text{font-size:18px;font-weight:600;color:var(--accent);text-shadow:0 0 20px rgba(0,217,255,0.6);animation:pulse-hint 2s ease-in-out infinite}
-@keyframes pulse-hint{0%,100%{opacity:1;transform:scale(1) translateY(-5px)}50%{opacity:0.7;transform:scale(1.05) translateY(-10px)}}
-
-/* responsive adjustments */
-@media (max-width:720px){
-  .proof-grid{flex-direction:column;gap:1.25rem}
-  .main-proof{flex-basis:100%;max-inline-size:92%;transform:none}
-  .stack{inline-size:220px;block-size:300px}
-}
 html {
   scroll-behavior: smooth;
   background: var(--bg);
