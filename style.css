@@ -670,6 +670,29 @@ h2::after {
   color: #f87171;
 }
 
+.privacy-notice {
+  font-size: 0.75rem;
+  color: var(--subtle);
+  line-height: 1.6;
+  margin: 1rem 0 0.5rem 0;
+  padding: 0.75rem;
+  background: rgba(255,255,255,0.02);
+  border-left: 2px solid rgba(0,217,255,0.3);
+  border-radius: 4px;
+}
+
+.privacy-notice a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.privacy-notice a:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
 /* Instant Contact Cards */
 .instant-contact-cards {
   display: grid;
