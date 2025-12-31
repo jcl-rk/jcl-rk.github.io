@@ -320,11 +320,11 @@ interactiveElements.forEach(element => {
 })();
 
 // Keep-Alive System (24/7)
-// Pings backend every 14 minutes to prevent free tier sleep
+// Pings backend every 12 minutes to prevent free tier sleep
 // Uses ~744 hours/month (750 hour limit resets monthly)
 (function() {
   const BACKEND_URL = 'https://greyroomchats-backend.onrender.com';
-  const PING_INTERVAL = 14 * 60 * 1000; // 14 minutes (before 15-min sleep threshold)
+  const PING_INTERVAL = 12 * 60 * 1000; // 12 minutes (3-min safety margin before 15-min sleep)
 
   async function pingBackend() {
     try {
@@ -349,6 +349,6 @@ interactiveElements.forEach(element => {
   // Ping immediately on page load to wake up backend
   pingBackend();
   
-  // Then ping every 14 minutes
+  // Then ping every 12 minutes
   setInterval(pingBackend, PING_INTERVAL);
 })();
