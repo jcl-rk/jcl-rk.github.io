@@ -274,18 +274,22 @@ interactiveElements.forEach(element => {
       clearTimeout(timeoutId);
 
       if (response.ok) {
+        // Change button text to success checkmark
+        submitBtn.textContent = '✓ Sent!';
+        submitBtn.style.opacity = '1';
+        
+        // Show success message
         formFeedback.textContent = '✓ Request sent! We\'ll reach out soon.';
         formFeedback.className = 'success';
         contactForm.reset();
         updateFormState();
         
-        // Re-enable button after 3 seconds
+        // Re-enable button after 2 seconds
         setTimeout(() => {
           submitBtn.disabled = false;
           submitBtn.textContent = originalBtnText;
-          submitBtn.style.opacity = '1';
           submitBtn.style.cursor = 'pointer';
-        }, 3000);
+        }, 2000);
       } else {
         throw new Error('Server error');
       }
@@ -293,22 +297,32 @@ interactiveElements.forEach(element => {
       // Show appropriate error message
       console.error('Failed to send:', error);
       if (error.name === 'AbortError') {
+        // Change button text to success checkmark
+        submitBtn.textContent = '✓ Sent!';
+        submitBtn.style.opacity = '1';
+        
+        // Show success message
         formFeedback.textContent = '✓ Request sent! We\'ll reach out soon.';
         formFeedback.className = 'success';
         contactForm.reset();
         updateFormState();
+        
+        // Re-enable button after 2 seconds
+        setTimeout(() => {
+          submitBtn.disabled = false;
+          submitBtn.textContent = originalBtnText;
+          submitBtn.style.cursor = 'pointer';
+        }, 2000);
       } else {
         formFeedback.textContent = '❌ Failed to send. Please try again or contact via the buttons above.';
         formFeedback.className = 'error';
-      }
-      
-      // Re-enable button after delay
-      setTimeout(() => {
+        
+        // Re-enable button immediately on real error
         submitBtn.disabled = false;
         submitBtn.textContent = originalBtnText;
         submitBtn.style.opacity = '1';
         submitBtn.style.cursor = 'pointer';
-      }, 3000);
+      }
     }
   });
 })();
