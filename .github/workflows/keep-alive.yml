@@ -2,9 +2,9 @@ name: Keep Backend Alive
 
 on:
   schedule:
-    # Runs every 10 minutes (5 minute safety margin before 15-min sleep)
+    # Runs every 8 minutes (buffer for Render's idle timeout + GitHub schedule drift)
     # Note: GitHub may delay scheduled runs by a few minutes
-    - cron: '*/10 * * * *'
+    - cron: '*/8 * * * *'
   workflow_dispatch: # Allows manual trigger from Actions tab
 
 jobs:
@@ -12,45 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - name: Primary Ping - Health Endpoint
+      - name: Ping backend health
         run: |
-          echo "🏓 Primary ping to health endpoint..."
-          response=$(curl -s -o /dev/null -w "%{http_code}" --max-time 30 https://greyroomchats-backend.onrender.com/api/health)
-          
-          if [ $response -eq 200 ]; then
-            echo "✅ Primary ping successful (HTTP $response)"
-          else
-            echo "⚠️ Primary ping returned HTTP $response"
-          fi
-          
-      - name: Redundant Ping 1 (30s delay)
-        run: |
-          sleep 30
-          echo "🏓 Redundant ping 1..."
-          response=$(curl -s -o /dev/null -w "%{http_code}" --max-time 30 https://greyroomchats-backend.onrender.com/api/health)
-          echo "Response: HTTP $response"
-          
-      - name: Redundant Ping 2 (60s delay)
-        run: |
-          sleep 30
-          echo "🏓 Redundant ping 2..."
-          response=$(curl -s -o /dev/null -w "%{http_code}" --max-time 30 https://greyroomchats-backend.onrender.com/api/health)
-          echo "Response: HTTP $response"
-          
-      - name: Retry on Failure
-        if: failure()
-        run: |
-          echo "🔄 Previous ping failed, retrying..."
-          for i in {1..3}; do
-            echo "Retry attempt $i..."
-            response=$(curl -s -o /dev/null -w "%{http_code}" --max-time 30 https://greyroomchats-backend.onrender.com/api/health)
-            if [ $response -eq 200 ]; then
-              echo "✅ Retry successful"
-              exit 0
-            fi
-            sleep 10
-          done
-          echo "❌ All retries failed"
-          
-      - name: Log Timestamp
-        run: echo "Keep-alive ping completed at $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+          echo "Pinging backend health..."
+          curl -fsS --max-time 20 https://greyroomchats-backend.onrender.com/api/health > /dev/null
+          echo "OK $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
