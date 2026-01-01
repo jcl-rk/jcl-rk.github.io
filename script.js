@@ -4,6 +4,12 @@ const IMAGE_TRANSITION_DELAY_MS = 250;
 const SUCCESS_BUTTON_RESET_MS = 2000;
 const REQUEST_TIMEOUT_MS = 60000; // 60 seconds for server wake-up
 const BACKEND_API_URL = 'https://greyroomchats-backend.onrender.com/api/contact'; // Change for local dev
+const BACKEND_HEALTH_URL = BACKEND_API_URL.replace(/\/api\/contact\/?$/, '/api/health');
+
+// Best-effort warm-up (Render free tier can cold-start after inactivity)
+window.addEventListener('DOMContentLoaded', () => {
+  fetch(BACKEND_HEALTH_URL, { method: 'GET', cache: 'no-store', keepalive: true }).catch(() => {});
+});
 
 const sections = document.querySelectorAll('.section');
 
@@ -301,7 +307,8 @@ interactiveElements.forEach(element => {
       email: emailInput.value || null,
       telegram: telegramInput.value || null,
       message: document.getElementById('message-input').value || null,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
+      honeypot: honeypotField ? honeypotField.value : ''
     };
 
     // Clear previous feedback
